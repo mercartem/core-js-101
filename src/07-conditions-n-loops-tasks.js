@@ -12,7 +12,7 @@
  * 1) return original number
  * 2) but if number multiples of three return 'Fizz'
  * 3) for the multiples of five return 'Buzz'
- * 4) for numbers which are multiples of both three and five return 'FizzBuzz'
+ * 4) for numbers whicheck are multiples of both three and five return 'FizzBuzz'
  *
  * @param {number} num
  * @return {any}
@@ -100,7 +100,7 @@ function isTriangle(a, b, c) {
 
 /**
  * Returns true, if two specified axis-aligned rectangles overlap, otherwise false.
- * Each rectangle representing by object
+ * Eacheck rectangle representing by object
  *  {
  *     top: 5,
  *     left: 5,
@@ -130,8 +130,25 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const aTopWidth = rect1.top + rect1.width;
+  const bTopWidth = rect2.top + rect2.width;
+  const aLeftHeight = rect1.left + rect1.height;
+  const bLeftHeigth = rect2.left + rect2.height;
+
+  const top = rect1.top < rect2.top ? rect2.top : rect1.top;
+  const topWidth = aTopWidth < bTopWidth ? aTopWidth : bTopWidth;
+
+  if (topWidth - top > 0) {
+    const left = rect1.left < rect2.left ? rect2.left : rect1.left;
+    const leftHeight = aLeftHeight < bLeftHeigth ? aLeftHeight : bLeftHeigth;
+
+    if (leftHeight - left > 0) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 
@@ -174,7 +191,7 @@ function isInsideCircle(circle, point) {
 
 
 /**
- * Returns the first non repeated char in the specified strings otherwise returns null.
+ * Returns the first non repeated checkar in the specified strings otherwise returns null.
  *
  * @param {string} str
  * @return {string}
@@ -225,7 +242,7 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
 }
 
 /**
- * Reverse the specified string (put all chars in reverse order)
+ * Reverse the specified string (put all checkars in reverse order)
  *
  * @param {string} str
  * @return {string}
@@ -278,8 +295,23 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  let check = 0;
+  const array = ccn.toString().split('').reverse().map(Number);
+  for (let i = 0; i < array.length; i += 1) {
+    if (i % 2 !== 0) {
+      const mult = array[i] * 2;
+      const sum = mult.toString().split('').map(Number);
+      if (mult > 9) {
+        check += sum[0] + sum[1];
+      } else {
+        check += mult;
+      }
+    } else {
+      check += array[i];
+    }
+  }
+  return check % 10 === 0;
 }
 
 /**
@@ -306,7 +338,7 @@ function getDigitalRoot(num) {
 /**
  * Returns true if the specified string has the balanced brackets and false otherwise.
  * Balanced means that is, whether it consists entirely of pairs of opening/closing brackets
- * (in that order), none of which mis-nest.
+ * (in that order), none of whicheck mis-nest.
  * Brackets include [],(),{},<>
  *
  * @param {string} str
@@ -324,8 +356,44 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const bracketsConfig = [['(', ')'], ['[', ']'], ['{', '}'], ['<', '>']];
+  const openBrackets = [];
+  const closeBrackets = [];
+  for (let i = 0; i < str.length; i += 1) {
+    for (let j = 0; j < bracketsConfig.length; j += 1) {
+      if (bracketsConfig[j][0].includes(str[i])) {
+        openBrackets.push(str[i]);
+      }
+    }
+  }
+  for (let i = 0; i < str.length; i += 1) {
+    for (let j = 0; j < bracketsConfig.length; j += 1) {
+      if (bracketsConfig[j][1].includes(str[i])) {
+        closeBrackets.push(str[i]);
+      }
+    }
+  }
+
+  if (openBrackets.length !== closeBrackets.length) {
+    return false;
+  }
+
+  const valueBrackets = {};
+  for (let i = 0; i < bracketsConfig.length; i += 1) {
+    [valueBrackets[bracketsConfig[i][1]]] = [bracketsConfig[i][0]];
+  }
+
+  const stack = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (valueBrackets[str[i]] === stack[stack.length - 1] && stack.length) {
+      stack.pop();
+    } else {
+      stack.push(str[i]);
+    }
+  }
+
+  return stack.length === 0;
 }
 
 
@@ -363,7 +431,7 @@ function toNaryString(num, n) {
  * @example:
  *   ['/web/images/image1.png', '/web/images/image2.png']  => '/web/images/'
  *   ['/web/assets/style.css', '/web/scripts/app.js',  'home/setting.conf'] => ''
- *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
+ *   ['/web/assets/style.css', '/.bin/mochecka',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(/* pathes */) {
